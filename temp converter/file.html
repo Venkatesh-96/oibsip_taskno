@@ -1,0 +1,165 @@
+<html>
+<head>
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Roboto:wght@100;300;400;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500;1,700&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #9369ca;
+    background-image: url(bg.jpg);
+    background-size: cover;
+}
+
+#calcTemp {
+    padding: 29px 67px;
+    min-height: 290px;
+    background-color: #32afd1;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+label {
+    font-size: 30px;
+    line-height: 78px;
+}
+
+#temp {
+    width: 110px;
+    height: 34px;
+    border-radius: 5px;
+    margin: 12px;
+    padding: 8px;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+}
+
+#temp_diff {
+    width: 120px;
+    height: 34px;
+    border-radius: 5px;
+    margin: 12px;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+}
+
+#submit {
+    width: 100px;
+    border-radius: 5px;
+    margin: 30px 0 20px 0;
+    font-size: 18px;
+    background-color: rgb(137, 223, 153);
+    padding: 5px;
+    transition: all 0.5s ease;
+}
+
+#submit:hover{
+    background-color: #bde910;
+    cursor: pointer;
+}
+
+#result{
+    font-size: 27px;
+}
+
+    </style>
+</head>
+<body>
+    <center>
+    <h1>Temperature Converter</h1>
+    </center>
+    <div class="container">
+        <div class="input">
+            <label for="temp">Enter a temperature:</label>
+            <input type="number" id="temp" placeholder="Enter">
+            <select id="unit">
+                <option value="C">Celsius</option>
+                <option value="F">Fahrenheit</option>
+                <option value="K">Kelvin</option>
+            </select>
+            <button id="convert">Convert</button>
+        </div>
+        <div class="output">
+            <p id="result"></p>
+            <p id="error" class="error"></p>
+        </div>
+    </div>
+    <script>
+        // Get the elements from the document
+        const temp = document.getElementById("temp");
+        const unit = document.getElementById("unit");
+        const convert = document.getElementById("convert");
+        const result = document.getElementById("result");
+        const error = document.getElementById("error");
+
+        // Define the conversion formulas
+        const celsiusToFahrenheit = (c) => c * 9 / 5 + 32;
+        const celsiusToKelvin = (c) => c + 273.15;
+        const fahrenheitToCelsius = (f) => (f - 32) * 5 / 9;
+        const fahrenheitToKelvin = (f) => (f - 32) * 5 / 9 + 273.15;
+        const kelvinToCelsius = (k) => k - 273.15;
+        const kelvinToFahrenheit = (k) => (k - 273.15) * 9 / 5 + 32;
+
+        // Define a function to convert the temperature
+        const convertTemp = () => {
+            // Get the input value and unit
+            const value = temp.value;
+            const from = unit.value;
+
+            // Clear the previous output and error
+            result.innerHTML = "";
+            error.innerHTML = "";
+
+            // Check if the input is a valid number
+            if (isNaN(value) || value === "") {
+                error.innerHTML = "Please enter a valid number.";
+                return;
+            }
+
+            // Convert the input to a number
+            const num = Number(value);
+
+            // Check if the input is a valid temperature
+            if (from === "K" && num < 0) {
+                error.innerHTML = "Please enter a positive temperature in Kelvin.";
+                return;
+            }
+
+            // Convert the temperature based on the unit
+            let output = "";
+            switch (from) {
+                case "C":
+                    output += `${num} °C = ${celsiusToFahrenheit(num).toFixed(2)} °F<br>`;
+                    output += `${num} °C = ${celsiusToKelvin(num).toFixed(2)} K`;
+                    break;
+                case "F":
+                    output += `${num} °F = ${fahrenheitToCelsius(num).toFixed(2)} °C<br>`;
+                    output += `${num} °F = ${fahrenheitToKelvin(num).toFixed(2)} K`;
+                    break;
+                case "K":
+                    output += `${num} K = ${kelvinToCelsius(num).toFixed(2)} °C<br>`;
+                    output += `${num} K = ${kelvinToFahrenheit(num).toFixed(2)} °F`;
+                    break;
+            }
+
+            // Display the output
+            result.innerHTML = output;
+        };
+
+        // Add an event listener to the convert button
+        convert.addEventListener("click", convertTemp);
+    </script>
+</body>
+</html>
